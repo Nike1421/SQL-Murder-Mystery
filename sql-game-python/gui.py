@@ -9,16 +9,14 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 # from sqlGameBackend.game_constants import questions, hints
+from game_constants import questions, hints
 from scoreboard import Scoreboard
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Code Files\Python Files\SQL-Murder-Mystery\guifolder\build\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-
-def reset_game():
-    CURRENT_LEVEL = 1
 
 game_scoreboard = Scoreboard()
 
