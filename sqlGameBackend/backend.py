@@ -31,13 +31,17 @@ class GameBackend(Resource):
         try:
             query = request.form['query']
             level = request.form['level']
+
             queryResult = pd.read_sql_query(query, con)
             result = queryResult.equals(output[int(level)])
+            
             if FPC.output_image_path.exists():
-                os.remove(
-                    FPC.output_image_path)
-            dfi.export(queryResult, FPC.output_image_path,
-                       table_conversion='matplotlib')
+                os.remove(FPC.output_image_path)
+            dfi.export(
+                queryResult,
+                FPC.output_image_path,
+                table_conversion='matplotlib'
+            )
             response = jsonify({'data': result})
             response.status_code = 200
             return response
