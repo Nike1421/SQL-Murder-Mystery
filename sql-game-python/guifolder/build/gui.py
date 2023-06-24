@@ -8,15 +8,19 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+# from sqlGameBackend.game_constants import questions, hints
+from scoreboard import Scoreboard
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Code Files\Python Files\SQL-Murder-Mystery\guifolder\build\assets\frame0")
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+def reset_game():
+    CURRENT_LEVEL = 1
+
+game_scoreboard = Scoreboard()
 
 window = Tk()
 
@@ -70,13 +74,13 @@ entry_1.place(
     x=1018.0,
     y=25.0,
     width=145.0,
-    height=94.0
+    height=0
 )
 
 canvas.create_text(
-    1019.0,
+    1050.0,
     34.0,
-    anchor="nw",
+    anchor="ne",
     text="Points",
     fill="#5F95FF",
     font=("Montserrat Bold", 14 * -1)
@@ -97,7 +101,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=game_scoreboard.level_up,
     relief="flat"
 )
 button_1.place(
@@ -113,7 +117,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=lambda: print(game_scoreboard.level),
     relief="flat"
 )
 button_2.place(

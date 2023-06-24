@@ -1,2 +1,4 @@
 .vscode
 sqlgame/node_modules
+sql-game-python/__pycache__
+sql-game-python/filepathcheck.py

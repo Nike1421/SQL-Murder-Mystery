@@ -8,7 +8,7 @@ from flask_restful import Resource, Api
 from flask import Flask, jsonify, request
 
 import file_path_constants as FPC
-from query_constants import queries
+from game_constants import queries
 
 app = Flask(__name__)
 cors = CORS(app)
