@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'digital';
-  src: url('C:\Users\voras\Desktop\SQL-murder-Mystery\sqlgame\src\digital.ttf') format('truetype');
+  src: url('./digital.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
