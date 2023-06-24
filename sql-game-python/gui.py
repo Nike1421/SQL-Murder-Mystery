@@ -8,7 +8,6 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-# from sqlGameBackend.game_constants import questions, hints
 from game_constants import questions, hints
 from scoreboard import Scoreboard
 
@@ -20,12 +19,16 @@ def relative_to_assets(path: str) -> Path:
 
 game_scoreboard = Scoreboard()
 
+# Build the main GUI Window
 window = Tk()
 
+# Set the dimensions of the window
 window.geometry("1200x666")
+
+# Set Background Color
 window.configure(bg = "#5F95FF")
 
-
+# Build a Canvas object to the window for adding widgets
 canvas = Canvas(
     window,
     bg = "#5F95FF",
@@ -37,6 +40,8 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
+
+# Main App Text
 canvas.create_text(
     100.0,
     25.0,
@@ -47,6 +52,7 @@ canvas.create_text(
     font=("Montserrat Bold", 40 * -1)
 )
 
+# Off White Rectangle on the right of the canvas
 canvas.create_rectangle(
     400.0,
     0.0,
@@ -55,20 +61,25 @@ canvas.create_rectangle(
     fill="#FFFFFF",
     outline="")
 
-entry_image_1 = PhotoImage(
+# Points Board
+points_board_img = PhotoImage(
     file=relative_to_assets("entry_1.png"))
-entry_bg_1 = canvas.create_image(
+
+
+points_board_bg = canvas.create_image(
     1090.5,
     73.0,
-    image=entry_image_1
+    image=points_board_img
 )
-entry_1 = Entry(
+
+points_board_entry = Entry(
     bd=0,
     bg="#EFEFEF",
     fg="#000716",
     highlightthickness=0
 )
-entry_1.place(
+
+points_board_entry.place(
     x=1018.0,
     y=25.0,
     width=145.0,
@@ -93,90 +104,125 @@ canvas.create_text(
     font=("Montserrat Bold", 48 * -1)
 )
 
-button_image_1 = PhotoImage(
+# Help Button
+help_button_image = PhotoImage(
     file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
+
+help_button = Button(
+    image=help_button_image,
     borderwidth=0,
     highlightthickness=0,
     command=game_scoreboard.level_up,
     relief="flat"
 )
-button_1.place(
+
+help_button.place(
     x=1003.0,
     y=268.0,
     width=175.0,
     height=48.0
 )
 
-button_image_2 = PhotoImage(
+# Execute Button
+execute_button_image = PhotoImage(
     file=relative_to_assets("button_2.png"))
-button_2 = Button(
-    image=button_image_2,
+
+execute_button = Button(
+    image=execute_button_image,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print(game_scoreboard.level),
     relief="flat"
 )
-button_2.place(
+
+execute_button.place(
     x=1003.0,
     y=547.0,
     width=175.0,
     height=90.0
 )
 
-button_image_3 = PhotoImage(
+# Hint Button
+hint_button_image = PhotoImage(
     file=relative_to_assets("button_3.png"))
-button_3 = Button(
-    image=button_image_3,
+
+hint_button = Button(
+    image=hint_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+    command=lambda: print("hint_button clicked"),
     relief="flat"
 )
-button_3.place(
+
+hint_button.place(
     x=1003.0,
     y=203.0,
     width=175.0,
     height=48.0
 )
 
-image_image_1 = PhotoImage(
+# Schema Button
+schema_button_image = PhotoImage(
+    file=relative_to_assets("button_4.png"))
+
+schema_button = Button(
+    image=schema_button_image,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("schema_button clicked"),
+    relief="flat"
+)
+
+schema_button.place(
+    x=1003.0,
+    y=138.0,
+    width=175.0,
+    height=48.0
+)
+
+# Detective Image
+detective_image = PhotoImage(
     file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
+detective = canvas.create_image(
     200.0,
     613.0,
-    image=image_image_1
+    image=detective_image
 )
 
-image_image_2 = PhotoImage(
+# Text Bubble
+speech_bubble_image = PhotoImage(
     file=relative_to_assets("image_2.png"))
-image_2 = canvas.create_image(
+speech_bubble = canvas.create_image(
     200.0,
     342.0,
-    image=image_image_2
+    image=speech_bubble_image
 )
 
-entry_image_2 = PhotoImage(
+# SQL Entry Widget
+sql_entry_image = PhotoImage(
     file=relative_to_assets("entry_2.png"))
-entry_bg_2 = canvas.create_image(
+
+sql_entry_bg = canvas.create_image(
     200.0,
     324.5,
-    image=entry_image_2
+    image=sql_entry_image
 )
-entry_2 = Text(
+
+sql_entry = Text(
     bd=0,
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0
 )
-entry_2.place(
+
+sql_entry.place(
     x=93.0,
     y=251.0,
     width=214.0,
     height=145.0
 )
 
+# Table
 canvas.create_rectangle(
     433.0,
     25.0,
@@ -185,40 +231,31 @@ canvas.create_rectangle(
     fill="#D9D9D9",
     outline="")
 
-entry_image_3 = PhotoImage(
+# Detective Speech
+detective_speech_image = PhotoImage(
     file=relative_to_assets("entry_3.png"))
-entry_bg_3 = canvas.create_image(
+
+detective_speech_bg = canvas.create_image(
     709.5,
     495.5,
-    image=entry_image_3
+    image=detective_speech_image
 )
-entry_3 = Text(
+
+detective_speech_entry = Text(
     bd=0,
     bg="#D9D9D9",
     fg="#000716",
     highlightthickness=0
 )
-entry_3.place(
+
+detective_speech_entry.place(
     x=433.0,
     y=350.0,
     width=553.0,
     height=289.0
 )
 
-button_image_4 = PhotoImage(
-    file=relative_to_assets("button_4.png"))
-button_4 = Button(
-    image=button_image_4,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_4 clicked"),
-    relief="flat"
-)
-button_4.place(
-    x=1003.0,
-    y=138.0,
-    width=175.0,
-    height=48.0
-)
+
+
 window.resizable(False, False)
 window.mainloop()
