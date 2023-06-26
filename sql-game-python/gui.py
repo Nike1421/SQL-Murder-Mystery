@@ -26,20 +26,20 @@ window = Tk()
 window.geometry("1200x666")
 
 # Set Background Color
-window.configure(bg = "#5F95FF")
+window.configure(bg="#5F95FF")
 
 # Build a Canvas object to the window for adding widgets
 canvas = Canvas(
     window,
-    bg = "#5F95FF",
-    height = 666,
-    width = 1200,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
+    bg="#5F95FF",
+    height=666,
+    width=1200,
+    bd=0,
+    highlightthickness=0,
+    relief="ridge"
 )
 
-canvas.place(x = 0, y = 0)
+canvas.place(x=0, y=0)
 
 # Main App Text
 canvas.create_text(
@@ -49,7 +49,7 @@ canvas.create_text(
     justify="center",
     text="SQL\nMurder\nMystery",
     fill="#FFFFFF",
-    font=("Montserrat Bold", 40 * -1)
+    font=("Montserrat Bold", 40 * -1),
 )
 
 # Off White Rectangle on the right of the canvas
@@ -95,13 +95,13 @@ canvas.create_text(
     font=("Montserrat Bold", 14 * -1)
 )
 
-canvas.create_text(
+points_counter = canvas.create_text(
     1046.0,
     52.0,
     anchor="nw",
-    text="350",
     fill="#5F95FF",
-    font=("Montserrat Bold", 48 * -1)
+    font=("Montserrat Bold", 48 * -1),
+    text="20"
 )
 
 # Help Button
@@ -131,7 +131,7 @@ execute_button = Button(
     image=execute_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print(game_scoreboard.level),
+    command=verify_answers,
     relief="flat"
 )
 
@@ -150,7 +150,7 @@ hint_button = Button(
     image=hint_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("hint_button clicked"),
+    command=show_hint,
     relief="flat"
 )
 
@@ -169,7 +169,7 @@ schema_button = Button(
     image=schema_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("schema_button clicked"),
+    command=update_detective_text,
     relief="flat"
 )
 
@@ -198,28 +198,14 @@ speech_bubble = canvas.create_image(
     image=speech_bubble_image
 )
 
-# SQL Entry Widget
-sql_entry_image = PhotoImage(
+# Detective Speech Entry Widget
+detective_speech_image = PhotoImage(
     file=relative_to_assets("entry_2.png"))
 
-sql_entry_bg = canvas.create_image(
+detective_speech_entry_bg = canvas.create_image(
     200.0,
     324.5,
-    image=sql_entry_image
-)
-
-sql_entry = Text(
-    bd=0,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-
-sql_entry.place(
-    x=93.0,
-    y=251.0,
-    width=214.0,
-    height=145.0
+    image=detective_speech_image
 )
 
 # Table
@@ -231,30 +217,52 @@ canvas.create_rectangle(
     fill="#D9D9D9",
     outline="")
 
-# Detective Speech
-detective_speech_image = PhotoImage(
-    file=relative_to_assets("entry_3.png"))
-
-detective_speech_bg = canvas.create_image(
-    709.5,
-    495.5,
-    image=detective_speech_image
+table_label = Label(
+    window,
+    text=""
 )
 
-detective_speech_entry = Text(
+table_label.place(
+    x=433.0,
+    y=25.0,
+    width=553,
+    height=291,
+    anchor="nw"
+)
+
+# SQL Entry
+sql_entry_image = PhotoImage(
+    file=relative_to_assets("entry_3.png"))
+
+sql_entry_bg = canvas.create_image(
+    709.5,
+    495.5,
+    image=sql_entry_image
+)
+
+sql_entry = Text(
     bd=0,
     bg="#D9D9D9",
     fg="#000716",
     highlightthickness=0
 )
 
-detective_speech_entry.place(
+sql_entry.place(
     x=433.0,
     y=350.0,
     width=553.0,
     height=289.0
 )
 
+detective_question = canvas.create_text(
+    200.0,
+    325.0,
+    anchor="center",
+    justify="center",
+    text=questions[game_scoreboard.level - 1],
+    fill="#eb4034",
+    font=("Montserrat Bold", 15 * -1)
+)
 
 
 window.resizable(False, False)
