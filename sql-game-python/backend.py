@@ -50,7 +50,7 @@ class GameBackend(Resource):
             if FPC.output_image_path.exists():
                 os.remove(
                     FPC.output_image_path)
-            response = jsonify({'error': 'Its a syntax error'})
+            response = jsonify({'error': 'Its a syntax error', 'message': str(e)})
             response.status_code = 400
             return response
 
