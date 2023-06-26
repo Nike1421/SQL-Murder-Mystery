@@ -5,17 +5,160 @@
 
 from pathlib import Path
 
-# from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label, messagebox, font
+from PIL import Image, ImageTk
+import requests
+
 from game_constants import questions, hints
+import file_path_constants as FPC
 from scoreboard import Scoreboard
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
+
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+
+def disable_components():
+    hint_button["state"] = "disabled"
+    execute_button["state"] = "disabled"
+    sql_entry.delete("1.0", 'end-1c')
+    sql_entry.config(state="disabled")
+    congratulate()
+    pass
+
+
+def congratulate():
+    user_score = game_scoreboard.score
+    text = ''
+    if user_score == 820:
+        text = 'You are a SQL Grandmaster!!'
+    elif user_score >= 600 and user_score < 820:
+        text = 'You are a SQL Master!'
+    else:
+        text = 'You need more SQL Skills to find the murderer.'
+    table_label.config(image='', text=text)
+    pass
+
+
+def level_up_gui():
+    game_scoreboard.level_up()
+    sql_entry.delete("1.0", 'end-1c')
+    update_points()
+    update_detective_text()
+
+
+def wrong_answer():
+    game_scoreboard.wrong_answer()
+    canvas.itemconfig(detective_question,
+                      text="questions[game_scoreboard.level - 1]")
+    window.after(5000)
+    update_detective_text()
+    update_points()
+    if game_scoreboard.score == 0:
+        flag = messagebox.askyesno(
+            "You Failed!", "You have run out of points. Start Again?")
+        if flag:
+            reset_game()
+        else:
+            window.destroy()
+
+
+def reset_game():
+    game_scoreboard.reset()
+    update_points()
+    table_label.config(image='', text='')
+    sql_entry.delete("1.0", 'end-1c')
+    hint_button["state"] = "normal"
+    execute_button["state"] = "normal"
+    update_detective_text()
+
+
+def update_points():
+    canvas.itemconfig(points_counter, text=str(game_scoreboard.score))
+
+
+def update_detective_text():
+    canvas.itemconfig(detective_question,
+                      text=questions[game_scoreboard.level - 1])
+
+
+def update_table():
+    # Declare image as global to avoid garbage collection
+    global image
+
+    # Open the output image
+    image = Image.open(FPC.output_image_path)
+
+    # Resize the image to fit the space
+    height = 291 if image.height > 291 else image.height
+    image = image.resize((533, height))
+
+    # Set the image
+    table_output_image = ImageTk.PhotoImage(image=image)
+
+    # Add image to Label
+    table_label.configure(image=table_output_image)
+
+    table_label.image = table_output_image
+
+
+def show_hint():
+    # Do something to show hint
+
+    # Disable the Hint Button
+    hint_button["state"] = "disabled"
+    pass
+
+
+def verify_answers():
+    # Set Flag
+    verify_correct = False
+
+    # Form the request object
+    form_data = {
+        "query": sql_entry.get("1.0", 'end-1c'),
+        "level": game_scoreboard.level - 1
+    }
+
+    # API Call
+    response = requests.post(
+        'http://127.0.0.1:5000/check',
+        data=form_data
+    )
+
+    # If no errors in SQL
+    if response.status_code == 200:
+        # Set the flag
+        verify_correct = response.json()['data']
+
+        # Update the table image
+        update_table()
+
+        # Verify answers
+        if verify_correct:
+            if game_scoreboard.level == 8:
+                disable_components()
+                congratulate()
+                window.after(5000)
+                flag = messagebox.askyesno(
+                    "You Win!", "Dp you want to start a new game?")
+                if flag:
+                    reset_game()
+                else:
+                    window.destroy()
+                return
+            level_up_gui()
+        else:
+            wrong_answer()
+        return
+    else:
+        # print(response.json())
+        messagebox.showerror("SQL Error!", response.json()['error'])
+
 
 game_scoreboard = Scoreboard()
 
@@ -87,8 +230,8 @@ points_board_entry.place(
 )
 
 canvas.create_text(
-    1050.0,
-    34.0,
+    1060.0,
+    32.0,
     anchor="ne",
     text="Points",
     fill="#5F95FF",
@@ -96,7 +239,7 @@ canvas.create_text(
 )
 
 points_counter = canvas.create_text(
-    1046.0,
+    1060.0,
     52.0,
     anchor="nw",
     fill="#5F95FF",
@@ -112,7 +255,7 @@ help_button = Button(
     image=help_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=game_scoreboard.level_up,
+    command=disable_components,
     relief="flat"
 )
 
@@ -261,7 +404,7 @@ detective_question = canvas.create_text(
     justify="center",
     text=questions[game_scoreboard.level - 1],
     fill="#eb4034",
-    font=("Montserrat Bold", 15 * -1)
+    font=("Bebas Regular", 13 * -1)
 )
 
 
